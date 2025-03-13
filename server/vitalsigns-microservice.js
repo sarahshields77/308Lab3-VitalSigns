@@ -47,7 +47,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addVitalSign(userId: ID!, heartRate: Int!, bloodPressure: String!): VitalSign
+    addVitalSign(heartRate: Int!, bloodPressure: String!): VitalSign
   }
 `;
 
@@ -60,9 +60,9 @@ const resolvers = {
     },
   },
   Mutation: {
-    addVitalSign: async (_, { userId, heartRate, bloodPressure }, { user }) => {
+    addVitalSign: async (_, { heartRate, bloodPressure }, { user }) => {
       if (!user) throw new Error('You must be logged in');
-      const newVital = new VitalSign({ userId, heartRate, bloodPressure });
+      const newVital = new VitalSign({ userId: user._id, heartRate, bloodPressure });
       await newVital.save();
       return newVital;
     },

@@ -25,7 +25,6 @@ function UserComponent() {
 
     const [login] = useMutation(LOGIN_MUTATION, {
         onCompleted: () => {
-            // Dispatch custom event upon successful login
             window.dispatchEvent(new CustomEvent('loginSuccess', { detail: { isLoggedIn: true } }));
         },
         onError: (error) => setAuthError(error.message || 'Login failed'),

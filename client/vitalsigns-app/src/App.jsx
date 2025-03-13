@@ -1,8 +1,8 @@
 // product-app/src/App.jsx
+import React from 'react';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import './App.css';
 import VitalSignsComponent from './VitalSignsComponent.jsx';
-
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4002/graphql', // Set this to your actual GraphQL endpoint
@@ -11,7 +11,6 @@ const client = new ApolloClient({
 });
 
 function App() {
-
   return (
     <div className='App'>
       <ApolloProvider client={client}>

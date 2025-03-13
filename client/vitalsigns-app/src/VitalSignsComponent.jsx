@@ -16,8 +16,8 @@ const GET_VITALSIGN_QUERY = gql`
 `;
 //
 const ADD_VITALSIGN_MUTATION = gql`
-  mutation AddVitalSign($userId: String!, $heartRate: String!, $bloodPressure: String!, $timestamp: String!) {
-    addVitalSign(userId: $userId, heartRate: $heartRate, bloodPressure: $bloodPressure, timestamp: $timestamp) {
+  mutation AddVitalSign($heartRate: Int!, $bloodPressure: String!) {
+    addVitalSign(heartRate: $heartRate, bloodPressure: $bloodPressure) {
       id
       userId
       heartRate
@@ -34,21 +34,22 @@ function VitalSignComponent() {
 
     const [addVitalSign, { loading: adding }] = useMutation(ADD_VITALSIGN_MUTATION, {
         refetchQueries: [GET_VITALSIGN_QUERY],
+        onCompleted: (data) => console.log("Mutation completed:", data),
+        onError: (error) => console.error("Mutation error:", error),
     });
 
-    const [userId, setUserId] = useState('');
     const [heartRate, setHeartRate] = useState('');
     const [bloodPressure, setBloodPressure] = useState('');
-    const [timestamp, setTimestamp] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!userId.trim() || !heartRate.trim() || !bloodPressure.trim() || !timestamp) return;
-        await addVitalSign({ variables: { userId, heartRate, bloodPressure, timestamp } });
-        setUserId('');
+        console.log("Form submitted", { heartRate, bloodPressure });
+        if (!heartRate.trim() || !bloodPressure.trim()) return;        
+        
+        const heartRateInt = parseInt(heartRate, 10);        
+        await addVitalSign({ variables: { heartRate: heartRateInt, bloodPressure } });
         setHeartRate('');
         setBloodPressure('');
-        setTimestamp('');
     };
 
     if (loading) return <p>Loading...</p>;
@@ -56,21 +57,12 @@ function VitalSignComponent() {
 
     return (
         <Container>
-            <h2>Add a New Vital Sign</h2>
+           <h2>Add a New Vital Sign</h2>
             <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                    <Form.Label>User ID</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter User ID"
-                        value={userId}
-                        onChange={(e) => setUserId(e.target.value)}
-                    />
-                </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Heart Rate</Form.Label>
                     <Form.Control
-                        type="text"
+                        type="number"
                         placeholder="Enter Heart Rate"
                         value={heartRate}
                         onChange={(e) => setHeartRate(e.target.value)}
@@ -85,14 +77,14 @@ function VitalSignComponent() {
                         onChange={(e) => setBloodPressure(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit" disabled={adding}>
+                <Button variant="primary" type="submit" disabled={adding} onClick={() => console.log("Adding vital sign...")}>
                     Add Vital Sign
                 </Button>
             </Form>
 
             <h3 className="mt-4">Vital Signs List</h3>
             <ListGroup>
-                {data && data.vitalSigns.map(({ id, userId, heartRate, bloodPressure, timestamp  }) => (
+                {data && data.vitalSigns.map(({ id, userId, heartRate, bloodPressure, timestamp }) => (
                     <ListGroup.Item key={id}>
                         <strong>{userId}</strong>: {heartRate} - {bloodPressure} - {timestamp}
                     </ListGroup.Item>

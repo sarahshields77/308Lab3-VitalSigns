@@ -53,6 +53,9 @@ const typeDefs = gql`
     register(username: String!, password: String!): Boolean
   }
 
+  type Mutation {
+    logout: Boolean
+  }
   
 `;
 
@@ -78,7 +81,7 @@ const resolvers = {
   
   Mutation: {
     login: async (_, { username, password }, { res }) => {
-      // In a real app, validate username and password against a database
+      // Validate username and password against the database
       const user = await User.findOne({ username });
       if (!user) {
         throw new Error('User not found');
@@ -88,12 +91,10 @@ const resolvers = {
       if (!match) {
         throw new Error('Invalid password');
       }
-      //
-      const token = jwt.sign({ username }, 'your_secret_key', { expiresIn: '1d' });
+      // Include the user ID in the JWT payload
+      const token = jwt.sign({ username, _id: user._id }, 'your_secret_key', { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,
-        //sameSite: 'None',
-       // secure: true, // Set to true if your site is served over HTTPS
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       });
       return true;
@@ -107,6 +108,11 @@ const resolvers = {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = new User({ username, password: hashedPassword });
       await newUser.save();
+      return true;
+    },
+
+    logout: (_, __, { res }) => {
+      res.clearCookie('token');
       return true;
     },
 
