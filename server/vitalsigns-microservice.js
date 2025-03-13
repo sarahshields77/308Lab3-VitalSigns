@@ -49,6 +49,9 @@ const typeDefs = gql`
   type Mutation {
     addVitalSign(heartRate: Int!, bloodPressure: String!): VitalSign
   }
+
+  type Mutation {
+    updateVitalSign(id: ID!, heartRate: Int, bloodPressure: String): VitalSign}
 `;
 
 // GraphQL resolvers
@@ -65,6 +68,12 @@ const resolvers = {
       const newVital = new VitalSign({ userId: user._id, heartRate, bloodPressure });
       await newVital.save();
       return newVital;
+    },
+
+    updateVitalSign: async (_, { id, heartRate, bloodPressure }, { user }) => {
+      if (!user) throw new Error('You must be logged in');
+      const updatedVital = await VitalSign.findByIdAndUpdate(id, { heartRate, bloodPressure }, { new: true, runValidators: true });
+      return updatedVital;
     },
   },
 };
