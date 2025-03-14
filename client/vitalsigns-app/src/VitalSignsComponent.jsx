@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, gql } from '@apollo/client';
 import { Button, Form, Container, ListGroup, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const GET_VITALSIGN_QUERY = gql`
   query GetVitalSign {
@@ -110,7 +111,7 @@ function VitalSignComponent() {
                         onChange={(e) => setBloodPressure(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit" disabled={adding}>
+                <Button variant="secondary" type="submit" disabled={adding}>
                     Add Vital Sign
                 </Button>
             </Form>

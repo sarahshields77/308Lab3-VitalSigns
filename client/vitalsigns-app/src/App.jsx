@@ -2,6 +2,7 @@
 import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import VitalSignsComponent from './VitalSignsComponent.jsx';
 
 const client = new ApolloClient({

@@ -1,43 +1,58 @@
 /* shell-app/src/App.css */
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* --- HEADER & FOOTER FULL WIDTH --- */
+.header, .footer {
+  position: fixed; /* or absolute */
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  z-index: 9999;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.header {
+  top: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.bg-custom {
+  background-color: #B4BF5E;
+}
+
+/* Push the main content down below the header */
+.main-content {
+  margin-top: 60px;
+  max-width: 1280px; /* Center only the main content */
+  margin: 60px auto 0 auto; /* 60px top margin if you want extra space */
+  padding: 1rem;
+}
+
+.footer {
+  bottom: 0;
+  height: 60px;
+  padding: 1rem;
+}
+
+/* Make sure the footer doesn't overlap main content if it's fixed */
+@media (min-height: 700px) {
+  .main-content {
+    margin-bottom: 60px; /* or enough space so the footer won't overlap content */
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

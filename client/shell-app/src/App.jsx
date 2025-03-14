@@ -2,6 +2,8 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import Header from './Header';
+import Footer from './Footer';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const UserApp = lazy(() => import('userApp/App'));
@@ -18,7 +20,6 @@ const CURRENT_USER_QUERY = gql`
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   // Fetch authentication status on load
   const { loading, error, data, refetch } = useQuery(CURRENT_USER_QUERY, {
     fetchPolicy: 'network-only',
@@ -30,7 +31,6 @@ function App() {
       // When a login is successful, update the isLoggedIn state
       setIsLoggedIn(event.detail.isLoggedIn);
     };
-
     window.addEventListener('loginSuccess', handleLoginSuccess);
 
     // Also check the authentication status from the GraphQL query result
@@ -55,12 +55,13 @@ function App() {
 
   return (
     <div className="App">
-      {/* The Header can include navigation and the logout button */}
-      <Header onLogout={handleLogout} />
-      <Suspense fallback={<div>Loading...</div>}>
-      {/* Display the login UI if not authenticated, otherwise show vital signs UI */}
-        {!isLoggedIn ? <UserApp /> : <VitalSignsApp />}
-      </Suspense>
+      <Header onLogout={handleLogout} username={data.currentUser?.username} />
+      <main className="main-content">
+        <Suspense fallback={<div>Loading...</div>}>
+          {!isLoggedIn ? <UserApp /> : <VitalSignsApp />}
+        </Suspense>
+      </main>
+      <Footer />
     </div>
   );
 }

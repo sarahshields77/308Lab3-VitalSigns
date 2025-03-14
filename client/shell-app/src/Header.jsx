@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMutation, gql } from '@apollo/client';
+import './App.css';
 
 const LOGOUT_MUTATION = gql`
   mutation Logout {
@@ -7,16 +8,17 @@ const LOGOUT_MUTATION = gql`
   }
 `;
 
-function Header({ onLogout }) {
+function Header({ onLogout, username }) {
   const [logout] = useMutation(LOGOUT_MUTATION, {
     onCompleted: () => onLogout(),
     onError: (error) => console.error("Logout error:", error),
   });
 
   return (
-    <header style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', background: '#eee' }}>
+    <header className='header bg-custom text-white py-3'>
       <h1>Vital Signs App</h1>
-      <button onClick={() => logout()}>Logout</button>
+      {username && <span style={{ marginLeft: '1rem' }}>Welcome, {username}</span>}
+      <button className="btn btn-secondary" onClick={() => logout()}>Logout</button>
     </header>
   );
 }
