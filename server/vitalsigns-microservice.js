@@ -9,7 +9,6 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
-// MongoDB connection setup
 mongoose.connect('mongodb://localhost:27017/308Lab3-vitalsigns-db', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -18,11 +17,10 @@ mongoose.connect('mongodb://localhost:27017/308Lab3-vitalsigns-db', {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// Vital Signs schema definition
 const vitalSignSchema = new Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: 'User', 
         required: true
       },
       heartRate: { type: Number, required: true },
@@ -32,7 +30,6 @@ const vitalSignSchema = new Schema({
 
 const VitalSign = model('VitalSign', vitalSignSchema);
 
-// GraphQL schema
 const typeDefs = gql`
    type VitalSign {
     id: ID!
@@ -78,7 +75,6 @@ const resolvers = {
   },
 };
 
-// Initialize express and configure middleware
 const app = express();
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'https://studio.apollographql.com'],
@@ -86,7 +82,6 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-// Create and start Apollo Server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -94,7 +89,7 @@ const server = new ApolloServer({
     const token = req.cookies['token'];
     if (token) {
       try {
-        const user = jwt.verify(token, 'your_secret_key'); // Replace 'your_secret_key' with your actual secret key
+        const user = jwt.verify(token, 'your_secret_key'); 
         return { user };
       } catch (e) {
         throw new Error('Your session expired. Sign in again.');

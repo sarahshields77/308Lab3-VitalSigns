@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { Alert, Button, Form, Container, Nav, Spinner } from 'react-bootstrap';
 
-// GraphQL mutations
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
     login(username: $username, password: $password)
@@ -33,7 +32,7 @@ function UserComponent() {
     const [register] = useMutation(REGISTER_MUTATION, {
         onCompleted: () => {
             alert("Registration successful! Please log in.");
-            setActiveTab('login'); // Switch to login view
+            setActiveTab('login');
         },
         onError: (error) => setAuthError(error.message || 'Registration failed'),
     });

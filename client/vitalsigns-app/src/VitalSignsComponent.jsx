@@ -59,11 +59,9 @@ function VitalSignComponent() {
         onError: (error) => console.error("Mutation error:", error),
     });
 
-    // States for the add form
     const [heartRate, setHeartRate] = useState('');
     const [bloodPressure, setBloodPressure] = useState('');
 
-    // States for inline editing
     const [editingId, setEditingId] = useState(null);
     const [editHeartRate, setEditHeartRate] = useState('');
     const [editBloodPressure, setEditBloodPressure] = useState('');
@@ -120,7 +118,6 @@ function VitalSignComponent() {
             <ListGroup>
         {data &&
           data.vitalSigns.map((vital) => {
-            // Check if this vital sign is in edit mode
             if (vital.id === editingId) {
               return (
                 <ListGroup.Item key={vital.id}>

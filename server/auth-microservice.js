@@ -6,28 +6,25 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-//
+
 const app = express();
-//
-// Add cors middleware
+
 app.use(cors({
   origin: ['http://localhost:3000','http://localhost:3001',
-  'http://localhost:3002','https://studio.apollographql.com'], // Adjust the origin according to your micro frontends' host
-  credentials: true, // Allow cookies to be sent
+  'http://localhost:3002','https://studio.apollographql.com'], 
+  credentials: true, 
 }));
 app.use(cookieParser());
-//
-// MongoDB connection setup
+
 const mongoUri = 'mongodb://localhost:27017/auth-service-db';
 mongoose.connect(mongoUri, {});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-//
-// User schema definition
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    unique: true, // Ensures username is unique
+    unique: true, 
     required: true
   },
   password: {
@@ -35,9 +32,9 @@ const userSchema = new mongoose.Schema({
     required: true
   }
 }, { timestamps: true });
-//
+
 const User = mongoose.model('User', userSchema);
-//
+
 const typeDefs = gql`
 
   type User {
@@ -62,18 +59,15 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     currentUser: (_, __, { req }) => {
-      // Assuming the JWT token is sent via an HTTP-only cookie named 'token'
       const token = req.cookies['token'];
       if (!token) {
-        return null; // No user is logged in
+        return null;
       }
 
       try {
-        // Verify and decode the JWT. Note: Make sure to handle errors appropriately in a real app
         const decoded = jwt.verify(token, 'your_secret_key');
         return { username: decoded.username };
       } catch (error) {
-        // Token verification failed
         return null;
       }
     },
@@ -81,7 +75,6 @@ const resolvers = {
   
   Mutation: {
     login: async (_, { username, password }, { res }) => {
-      // Validate username and password against the database
       const user = await User.findOne({ username });
       if (!user) {
         throw new Error('User not found');
@@ -91,11 +84,10 @@ const resolvers = {
       if (!match) {
         throw new Error('Invalid password');
       }
-      // Include the user ID in the JWT payload
       const token = jwt.sign({ username, _id: user._id }, 'your_secret_key', { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        maxAge: 24 * 60 * 60 * 1000, 
       });
       return true;
     },

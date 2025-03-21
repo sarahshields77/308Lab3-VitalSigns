@@ -5,7 +5,7 @@ import UserComponent from './UserComponent';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4001/graphql', // Set this to your actual GraphQL endpoint
+  uri: 'http://localhost:4001/graphql', 
   cache: new InMemoryCache(),
   credentials: 'include'
 });

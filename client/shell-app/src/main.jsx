@@ -6,10 +6,9 @@ import { ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from '@ap
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
-// Set up the Apollo Client
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4001/graphql', // Adjust to your auth-microservice GraphQL endpoint
-  credentials: 'include', // Important for handling cookies properly
+  uri: 'http://localhost:4001/graphql', 
+  credentials: 'include', 
 });
 
 const client = new ApolloClient({

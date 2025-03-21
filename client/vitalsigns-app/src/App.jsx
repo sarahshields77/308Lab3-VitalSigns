@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import VitalSignsComponent from './VitalSignsComponent.jsx';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4002/graphql', // Set this to your actual GraphQL endpoint
+  uri: 'http://localhost:4002/graphql', 
   cache: new InMemoryCache(),
   credentials: 'include'
 });

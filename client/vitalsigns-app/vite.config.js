@@ -5,7 +5,7 @@ import federation from '@originjs/vite-plugin-federation';
 //
 export default defineConfig({
   server: {
-    port: 3002, // Specify the port to avoid conflicts
+    port: 3002, 
   },
   plugins: [
     react(),
@@ -13,7 +13,7 @@ export default defineConfig({
       name: 'vitalSignsApp',
       filename: 'remoteEntry.js',
       exposes: {
-        './App': './src/App', // Adjust the path to your main App or specific component
+        './App': './src/App', 
       },
       shared: ['react', 'react-dom', '@apollo/client', 'graphql'],
     }),

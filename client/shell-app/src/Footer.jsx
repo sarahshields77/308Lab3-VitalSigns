@@ -1,6 +1,6 @@
 // shell-app/src/Footer.jsx
 import React from 'react';
-import './App.css'; // or a separate Footer.css if you prefer
+import './App.css'; 
 
 function Footer() {
   return (
